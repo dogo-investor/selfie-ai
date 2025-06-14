@@ -35,4 +35,4 @@ venv/
 *.swp
 *.tmp
 
-.secrets.toml
+# .secrets.toml
