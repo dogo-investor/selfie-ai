@@ -1,0 +1,51 @@
+{
+    "toy story": {
+      "camera_style": "selfie-style",
+      "location": "sandy landscape",
+      "time_of_day": "morning",
+      "main_character": "Buzz Lightyear",
+      "main_character_outfit": "full armour",
+      "face_visibility": "his exposed face framed",
+      "light_source": "the kitchen window",
+      "outfit_material": "glossy and shining",
+      "background_setting": "Andy’s upstairs hallway and wooded stairs",
+      "background_activity": "toy land citizens are scurrying about in the hallway attending to their daily activities, from getting their haircut to getting a piece replaced at the maintenance center",
+      "location_description": "The hallway is definitely a nice part of town for the town.",
+      "secondary_character": "Woody",
+      "secondary_action_description": "crouched on the ground, carefully cleaning his boots with exaggerated focus",
+      "dialogue_line": "Okay, so we’re late to Bo’s Family Dinner, traffic is jammed, and Woody needed to get out and clean his leather."
+    },
+    "barbie": {
+      "camera_style": "selfie-style",
+      "location": "Barbie Mansion",
+      "time_of_day": "afternoon",
+      "main_character": "Barbie",
+      "main_character_outfit": "sparkly pink party dress",
+      "face_visibility": "her perfectly styled face framed with blonde curls",
+      "light_source": "a heart-shaped skylight",
+      "outfit_material": "glittering plastic",
+      "background_setting": "Barbie’s Dreamhouse interior",
+      "background_activity": "other Barbies doing yoga, styling outfits, or roller skating around",
+      "location_description": "It’s a glamorous day in Barbie's world.",
+      "secondary_character": "Ken",
+      "secondary_action_description": "checking his reflection while adjusting a sequined jacket",
+      "dialogue_line": "We're already late for the Dream Gala and Ken’s still fussing over his hair!"
+    },
+    "star wars": {
+      "camera_style": "selfie-style",
+      "location": "Tatooine Desert",
+      "time_of_day": "sunset",
+      "main_character": "Luke Skywalker",
+      "main_character_outfit": "Jedi robes",
+      "face_visibility": "his sunburned face visible beneath a hood",
+      "light_source": "a glowing twin-sun horizon",
+      "outfit_material": "rough-spun tunic with a worn leather belt",
+      "background_setting": "a hangar with droids moving crates",
+      "background_activity": "droids repairing ships and rebels preparing for battle",
+      "location_description": "This outpost is barely holding together.",
+      "secondary_character": "R2-D2",
+      "secondary_action_description": "whirring softly while welding a circuit panel",
+      "dialogue_line": "We’re out of time. R2 blew the hyperdrive coil again."
+    }
+  }
+  

@@ -1,0 +1,36 @@
+# Ignore Python cache and compiled files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ignore virtual environments
+venv/
+.env/
+.env.*
+
+# Ignore environment config
+*.env
+*.envrc
+
+# VS Code settings
+.vscode/
+
+# Ignore output videos
+*.mp4
+
+# Streamlit’s temp file
+.streamlit/
+
+# macOS metadata
+.DS_Store
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Byte-compiled and temporary files
+*.log
+*.sqlite3
+*.bak
+*.swp
+*.tmp
