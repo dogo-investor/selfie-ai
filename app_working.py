@@ -3,10 +3,12 @@ import os
 import requests
 from pathlib import Path
 from typing import Optional
+
 import streamlit as st
 
-# ✅ Set FAL_KEY from Streamlit secrets
+# ✅ Use Streamlit's secrets management
 os.environ["FAL_KEY"] = st.secrets["FAL_KEY"]
+PPLX_API_KEY = st.secrets["PPLX_API_KEY"]
 
 import fal_client
 
@@ -16,11 +18,15 @@ class VideoPromptGenerator:
     PROMPT_FILE = "video_prompt_agent.md"
 
     def __init__(self, api_key: Optional[str] = None):
-        self.api_key = api_key or st.secrets["PPLX_API_KEY"]
+        self.api_key = api_key or PPLX_API_KEY  # ✅ Use secret directly
 
         print("🔐 API Key Loaded:", "✅ YES" if self.api_key else "❌ MISSING")
 
         self.system_prompt = self._load_prompt(self.PROMPT_FILE)
+
+    def _load_api_key(self):
+        # ✅ No longer needed since we load directly from secrets
+        return PPLX_API_KEY
 
     def _load_prompt(self, file_path):
         try:

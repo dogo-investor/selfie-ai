@@ -4,11 +4,11 @@ import requests
 from pathlib import Path
 from typing import Optional
 
-from dotenv import load_dotenv
-load_dotenv()
+import streamlit as st
 
-# ✅ Set FAL_KEY as expected by fal_client
-os.environ["FAL_KEY"] = os.getenv("FAL_KEY")
+# ✅ Use Streamlit's secrets management
+os.environ["FAL_KEY"] = st.secrets["FAL_KEY"]
+
 
 import fal_client
 

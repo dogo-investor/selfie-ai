@@ -34,3 +34,5 @@ venv/
 *.bak
 *.swp
 *.tmp
+
+.secrets.toml
