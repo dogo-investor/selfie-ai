@@ -10,7 +10,7 @@ Built with ❤️ using **Streamlit**, **Python**, and ✨ some serious AI magic
 
 ## 🌟 Live Demo
 
-👉 [**Launch the App** on Streamlit](https://your-deployed-app-url.streamlit.app)
+👉 [**Launch the App** on Streamlit](https://selfie-ai.streamlit.app)
 
 ---
 
