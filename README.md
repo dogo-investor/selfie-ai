@@ -8,7 +8,7 @@ Built with ❤️ using **Streamlit**, **Python**, and ✨ some serious AI magic
 
 ---
 
-## 🌟 Live Demo
+## 🌟 Live Product
 
 👉 [**Launch the App** on Streamlit](https://selfie-ai.streamlit.app)
 
