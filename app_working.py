@@ -1,116 +1,82 @@
-import json
-import os
-import requests
-from pathlib import Path
-from typing import Optional
-
 import streamlit as st
+import time
+import requests
+from generate_video_prompt import VideoPromptGenerator, generate_veo3_video
 
-# ✅ Use Streamlit's secrets management
-os.environ["FAL_KEY"] = st.secrets["FAL_KEY"]
-PPLX_API_KEY = st.secrets["PPLX_API_KEY"]
+# Load the API
+generator = VideoPromptGenerator()
 
-import fal_client
+# Page settings
+st.set_page_config(page_title="🎬 Video Prompt Generator", layout="centered")
 
-class VideoPromptGenerator:
-    API_URL = "https://api.perplexity.ai/chat/completions"
-    DEFAULT_MODEL = "sonar-pro"
-    PROMPT_FILE = "video_prompt_agent.md"
+st.title("🎬 One-Line Video Prompt Generator")
+st.markdown("Enter a **movie or show title**, and we'll dynamically build and render a cinematic handheld video using Perplexity + FAL.")
 
-    def __init__(self, api_key: Optional[str] = None):
-        self.api_key = api_key or PPLX_API_KEY  # ✅ Use secret directly
+user_input = st.text_input("🎥 Movie/Show Title", placeholder="e.g. Barbie, Toy Story, Pirates of the Caribbean")
 
-        print("🔐 API Key Loaded:", "✅ YES" if self.api_key else "❌ MISSING")
+if user_input:
+    st.markdown("#### 🔍 Extracting visual & narrative details...")
+    step = st.empty()
 
-        self.system_prompt = self._load_prompt(self.PROMPT_FILE)
+    # Narrative animation steps
+    for msg in [
+        "🌍 Understanding cinematic universe and genre...",
+        "🎭 Identifying main character and key sidekick...",
+        "🎨 Extracting outfit, material, and environmental textures...",
+        "🏙 Framing the background setting and side activities...",
+        "🗣 Generating in-character cinematic dialogue line..."
+    ]:
+        step.markdown(msg)
+        time.sleep(0.6)
 
-    def _load_api_key(self):
-        # ✅ No longer needed since we load directly from secrets
-        return PPLX_API_KEY
+    try:
+        prompt_data = generator.generate_prompt_data(user_input)
+        final_prompt = generator.render_template(prompt_data)
 
-    def _load_prompt(self, file_path):
-        try:
-            prompt = Path(file_path).read_text()
-            print(f"📄 Prompt loaded from {file_path} (length: {len(prompt)} chars)")
-            return prompt
-        except Exception as e:
-            raise RuntimeError(f"Failed to load system prompt: {e}")
+        step.markdown("✅ All cinematic variables extracted.")
+        st.markdown("#### 🎬 Composing final video prompt...")
+        st.code(final_prompt, language="markdown")
 
-    def generate_prompt_data(self, title: str):
-        user_prompt = f"Create a cinematic handheld prompt preset for: {title}"
-        print(f"🎬 Generating prompt for: {title}")
+        with st.expander("🧩 Raw variable data"):
+            st.json(prompt_data)
 
-        headers = {
-            "accept": "application/json",
-            "content-type": "application/json",
-            "Authorization": f"Bearer {self.api_key}"
-        }
+        st.markdown("#### 🎥 Generating cinematic video with FAL...")
+        video_status = st.empty()
+        video_status.info("⏳ Video is being rendered... please wait (usually under 1 minute)")
 
-        body = {
-            "model": self.DEFAULT_MODEL,
-            "messages": [
-                {"role": "system", "content": self.system_prompt},
-                {"role": "user", "content": user_prompt}
-            ],
-            "response_format": {
-                "type": "json_schema",
-                "json_schema": {
-                    "schema": {
-                        "type": "object",
-                        "properties": {key: {"type": "string"} for key in [
-                            "camera_style", "location", "time_of_day", "main_character", "main_character_outfit",
-                            "face_visibility", "light_source", "outfit_material", "background_setting",
-                            "background_activity", "location_description", "secondary_character",
-                            "secondary_action_description", "dialogue_line"
-                        ]},
-                        "required": ["main_character", "location", "dialogue_line"]
-                    }
-                }
-            }
-        }
+        video_url = generate_veo3_video(final_prompt)
 
-        print(f"📤 Sending POST request to: {self.API_URL}")
-        print(f"🧾 Headers: {headers}")
-        print(f"📝 Body: {json.dumps(body, indent=2)[:500]}...")  # truncate long payload
+        # ⬇️ Added video preview + download UI
+        if video_url:
+            video_status.success("✅ Video generated successfully!")
 
-        try:
-            res = requests.post(self.API_URL, headers=headers, json=body)
-            print(f"📡 Status Code: {res.status_code}")
-            res.raise_for_status()
-            content = res.json()["choices"][0]["message"]["content"]
-            print("✅ Response received successfully.")
-            return json.loads(content)
-        except requests.exceptions.HTTPError as http_err:
-            print(f"❌ HTTP error: {http_err}")
-            print("📨 Response body:", res.text)
-            raise
-        except Exception as e:
-            print(f"❌ Unexpected error: {e}")
-            raise
+            if isinstance(video_url, dict):
+                video_url = video_url.get("url")
 
-    def render_template(self, data: dict):
-        template = """
-A cinematic handheld {camera_style} medium shot, set in a {location} in the {time_of_day}. {main_character} in {main_character_outfit} holds the camera at arm’s length, {face_visibility}, as sunlight glistens in from {light_source}. His {outfit_material} is glossy and shining. Behind him, {background_setting} – {background_activity}. The {location_description}. {main_character} slowly pans the camera sideways, revealing {secondary_character} {secondary_action_description}. Sun glistens off his frame as it shines through the window. Back on camera, {main_character} yells with a sense of urgency: “{dialogue_line}”
-"""
-        return template.format(**data)
-    
-def generate_veo3_video(prompt_text: str) -> str:
-    def on_queue_update(update):
-        if isinstance(update, fal_client.InProgress):
-            for log in update.logs:
-                print("🔄", log.get("message", ""))
+            if not video_url:
+                video_status.error("⚠️ Video URL not found in response.")
+            else:
+                st.markdown(
+                    f"""
+                    <div style="border: 2px dashed #28a745; padding: 1rem; border-radius: 10px; background-color: #f0fff5; margin-top: 1rem;">
+                        <h4 style="color: #28a745; margin-bottom: 0.5rem;">🎉 Your cinematic video is ready!</h4>
+                        <a href="{video_url}" target="_blank" style="font-size: 1.1rem; color: #155724; text-decoration: underline;">🔗 Click here to view or download your video</a><br>
+                        <span style="font-size: 0.9rem; color: #6c757d;">(hosted via FAL)</span>
+                    </div>
+                    """,
+                    unsafe_allow_html=True
+                )
 
-    result = fal_client.subscribe(
-        "fal-ai/veo3",
-        arguments={
-            "prompt": prompt_text,
-            "aspect_ratio": "16:9",
-            "duration": "8s",
-            "enhance_prompt": True,
-            "generate_audio": True
-        },
-        on_queue_update=on_queue_update,
-        with_logs=True,
-    )
+                video_path = "generated_veo3_video.mp4"
+                with open(video_path, "wb") as f:
+                    response = requests.get(video_url, stream=True)
+                    for chunk in response.iter_content(chunk_size=8192):
+                        f.write(chunk)
 
-    return result.get("video", None)
+                st.video(video_path)
+        else:
+            video_status.error("❌ Failed to generate video via FAL.")
+
+    except Exception as e:
+        step.markdown("❌ Perplexity or FAL failed.")
+        st.error(f"💥 Error: {str(e)}")
