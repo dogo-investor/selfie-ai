@@ -64,6 +64,7 @@ Just enter a movie/show title (e.g. `Barbie`, `Star Wars`, `Jimmy Neutron`) and:
 pip install -r requirements.txt
 
 ---
+```
 
 ## 2️⃣ Set your Environment
 
@@ -88,7 +89,7 @@ streamlit run app.py
 
 ## 🛡️ License
 
-MIT © 2025 — [@yourusername](https://github.com/yourusername)
+MIT © 2025 — [@dogo-investor](https://github.com/dogo-investor)
 
 
 ---
