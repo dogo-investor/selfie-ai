@@ -70,10 +70,12 @@ pip install -r requirements.txt
 PPLX_API_KEY=your_perplexity_key
 FAL_KEY=your_fal_key
 
+---
 
 ## 3️⃣ Run the App
 streamlit run app.py
 
+---
 
 ## 🧠 How It Works
 
@@ -102,7 +104,7 @@ MIT © 2025 — [@yourusername](https://github.com/yourusername)
 
 > 💬 *Feel free to star ⭐, fork 🍴, or raise an issue if you’d like to contribute or have ideas!*
 
-
+---
 
 
 
